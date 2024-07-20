@@ -30,7 +30,7 @@ I've done these steps in a kworkflow's fork of mine. Then, following the suggest
 
 ## Implementing a code coverage stage for the pipeline
 
-When the Jenkins pipeline got associated with the repository, it didn't detect many branches at first. It is because the pipeline was set to interact only with branches containing a ** Jenkinsfile ** in the root directory. It is the file containing all the pipeline steps to be executed. This way, the CI pipeline is on the project repository itself, open to the general public.
+When the Jenkins pipeline got associated with the repository, it didn't detect many branches at first. It is because the pipeline was set to interact only with branches containing a **Jenkinsfile** in the root directory. It is the file containing all the pipeline steps to be executed. This way, the CI pipeline is on the project repository itself, open to the general public.
 
 ![Image](assets/images/post_1/post_1_branches.png)
 
