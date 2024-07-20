@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "[GSoC] Implementing Jenkins as Code"
+date:   2024-05-19
+---
+
 # Applying the Jenkins as Code paradigm
 
 On my first two GSoC weeks, I've dealt with a basic Code Coverage pipeline and implemented it on a 

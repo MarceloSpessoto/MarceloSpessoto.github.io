@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "I was accepted into Google Summer of Code!"
+title:  "[GSoC] I was accepted into Google Summer of Code!"
 date:   2024-05-15
 ---
 
