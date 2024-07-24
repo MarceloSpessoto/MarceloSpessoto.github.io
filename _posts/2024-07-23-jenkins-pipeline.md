@@ -113,7 +113,11 @@ and their syntax for groovy scripting and applying that knowledge to set up a Mu
 builds for a GitHub repository.
 
 I hope to talk about Jenkins agents next and cover some implementations I've been experimenting for the 
-kworkflow CI I am working on.
+kworkflow CI I am working on and. 
+
+I will also prepare a blog post detailing the Jenkins as Code implementations
+for the kworkflow CI I am working on. It will cover this aspect of Jenkins with more in-depth details 
+and also explain the progress I've made with my Jenkins as Code repository for kworkflow.
 
 ## Glossary
 
