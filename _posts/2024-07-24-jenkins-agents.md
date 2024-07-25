@@ -22,7 +22,7 @@ date:   2024-07-24
         + [Creating the Cloud](#ctc)
 + [The integration tests](#tint)
 + [Final thoughts](#ft)
-+ [Resources](#resource)
++ [References](#resources)
 
 During my GSoC project of planning a Jenkins CI for kworkflow, I spent plenty of time experimenting with different possibilities of agent types for the infrastructure.
 This post aims to register every attempt of agent implementation so far, their respective implementation guide for a Jenkins server, and my insights about them for the kworkflow context.
@@ -292,10 +292,10 @@ the `deploy` feature testing. It probably be an even more theoretical and study-
 progress and accumulated insights on this blog.
 
 
-## Resources <a name="resources" />
+## References <a name="resources" />
 
-[Controller isolation page from Jenkins](https://www.jenkins.io/doc/book/security/controller-isolation/)
-[Docker agent definition from the pipeline](https://www.jenkins.io/doc/book/pipeline/docker/)
-[Pipeline Syntax for agents](https://www.jenkins.io/doc/book/pipeline/syntax/#agent).
-[SSH Build Agents Plugin](https://plugins.jenkins.io/ssh-slaves/) 
-[docker-ssh-agent container](https://github.com/jenkinsci/docker-ssh-agent) 
+[Controller isolation page from Jenkins](https://www.jenkins.io/doc/book/security/controller-isolation/)  
+[Docker agent definition from the pipeline](https://www.jenkins.io/doc/book/pipeline/docker/)  
+[Pipeline Syntax for agents](https://www.jenkins.io/doc/book/pipeline/syntax/#agent)    
+[SSH Build Agents Plugin](https://plugins.jenkins.io/ssh-slaves/)   
+[docker-ssh-agent container](https://github.com/jenkinsci/docker-ssh-agent)   
