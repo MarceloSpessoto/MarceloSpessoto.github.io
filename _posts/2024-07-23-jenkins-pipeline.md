@@ -119,9 +119,6 @@ I will also prepare a blog post detailing the Jenkins as Code implementations
 for the kworkflow CI I am working on. It will cover this aspect of Jenkins with more in-depth details 
 and also explain the progress I've made with my Jenkins as Code repository for kworkflow.
 
-## Glossary
-
-
 ## Resources
 
 [Docker Jenkins image](https://github.com/jenkinsci/docker)
