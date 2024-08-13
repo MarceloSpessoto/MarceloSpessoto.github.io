@@ -16,9 +16,9 @@ Actions CI to Jenkins has emerged as a more important task. From that, we will h
 to plan and develop the new testing workflow. Also, the dummy implementations could be seamlessly packed
 into the development period, where I will direct all my efforts on this specific issue.
 
-## Applying IaC
+## Applying CaC
 
-Infrastructure as Code (IaC) is a paradigm where the implementation of infrastructure is described in "code",
+Configuration as Code (CaC) is a paradigm where the configuration of an application is described in "code",
 such as yaml scripts. This way, one can easily automate the deployment of such infrastructure by using the
 code instead of setting things up manually.
 
@@ -39,11 +39,11 @@ The only important configuration I needed to set on the Dockerfile was to instal
 
 The full setup can be found [here](https://github.com/MarceloSpessoto/jenkins-kw-infra). 
 
-### Using Jenkins plugins for IaC deployment
+### Using Jenkins plugins for CaC deployment
 
 After setting up the basic docker environment, my next steps would be to configure Jenkins as Code for immediate configuration of newly deployed Jenkins containers.
 
-The core Jenkins for IaC is JCaC (Jenkins Configuration as Code). It lets you write on a simple yaml file the configuration settings of your Jenkins server.
+The core Jenkins for CaC is JCaC (Jenkins Configuration as Code). It lets you write on a simple yaml file the configuration settings of your Jenkins server.
 
 It is very simple to figure out how to write the configuration file. You can access their [example configuration samples](https://github.com/jenkinsci/configuration-as-code-plugin/tree/master/demos). You can also export yaml from a Jenkins server.
 

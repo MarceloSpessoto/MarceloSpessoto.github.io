@@ -34,7 +34,7 @@ if the former's implementation brings no benefit over the latter.
 
 ## The general architecture of the Jenkins infrastructure
 
-First of all, the Jenkins infrastructure is open source and available as code (by using IaC Jenkins plugins,
+First of all, the Jenkins infrastructure is open source and available as code (by using CaC Jenkins plugins,
 such as Jenkins Configuration as Code and Job DSL).
 
 The Jenkins server will be primarily composed of its controller deployed in the official Jenkins docker
