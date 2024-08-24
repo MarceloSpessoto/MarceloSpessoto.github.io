@@ -6,31 +6,14 @@ navbar_entries:
     url: blog
 
 project_entries:
-  - title: Project 1
-    url: overview-post
-    desc: This is an example project, configured in _data/home.yml
+  - title: A complete Jenkins server configuration for kworkflow
+    url: https://github.com/MarceloSpessoto/jenkins-kw-infra
+    desc: A complete docker-compose environment deploying a Jenkins server service, with everything configured
+      as code
 
-  - title: Project 2
-    url: overview-post
-    desc: Projects are shown in card layout
-
-  - title: Project 3
-    url: overview-post
-    desc: You can control visibility from _config.yml file
-
-  - title: Project 4
-    url: overview-post
-    desc: This project uses highlight markup, configured in _data/home.yml
-    highlight: WIP
-
-  - title: Project 5
-    url: overview-post
-    desc: Moonwalk also has horizontal list (used in header and footer)
-    highlight: WIP
-
-  - title: Project 6
-    url: overview-post
-    desc: It also has a scalable vertical list (in case you need it)
+  - title: lore-fetcher
+    url: https://github.com/MarceloSpessoto/lore-fetcher
+    desc: A Go application that tracks new patches sent to a given mailing list.
 
 old_project_entries:
   - title: Soopr
@@ -58,35 +41,42 @@ footer_entries:
     url: feed.xml
 
 misc_entries:
-  - title: this is an example vertical list
+  - title: Contributions to kworkflow
     url: false
+    entries: 
+      - title: Libnotify dep fix
+        url: https://github.com/kworkflow/kworkflow/pull/1005
 
-  - title: you can show or hide using a boolean flag in _config.yml
-    url: false
+      - title: remove kw vars
+        url: https://github.com/kworkflow/kworkflow/pull/1042
 
-  - title: and you can add data in _data/home.yml
-    url: false
+      - title: add from-sha option for kw build
+        url: https://github.com/kworkflow/kworkflow/pull/1060
 
-  - title: Blog posts
-    post_list: true
-    url: false
+      - title: replace every shebang with an updated version
+        url: https://github.com/kworkflow/kworkflow/pull/1090
 
-  - title: moonwalk on the Internet
+      - title: improve from_sha tests
+        url: https://github.com/kworkflow/kworkflow/pull/1141
+
+  - title: Contributions to linux Kernel (AMD Display subsystem)
     url: false
     entries:
-      - title: on Github
-        url: https://github.com/abhinavs/moonwalk
+      - title: Remove duplicate copyright boilerplate
+        url: https://lore.kernel.org/amd-gfx/20231228221513.2069-1-marcelomspessoto@gmail.com/
 
-      - title: originally built for abhinav's homepage
-        url: https://www.abhinav.co
+      - title: Fix codestyle issues
+        url: https://lore.kernel.org/amd-gfx/20231229174156.1800-1-marcelomspessoto@gmail.com/
 
-      - title: this list is scalable and can be nested
-        url: false
-        entries:
-          - title: this is nested inside a nested list
-            url: false
+      - title: Document the mpc component
+        url: https://lore.kernel.org/amd-gfx/CADnq5_M=eExVCby7v77fuRPD+3-fJTLLW4jK_vUSS23x_9+bOw@mail.gmail.com/
 
-          - title: it is easy to use, see _data/home.yml to see how to configure it.
-            url: false
+  - title: Contribution to React
+    url: https://github.com/DefinitelyTyped/DefinitelyTyped/pull/66723
+    desc: Adding support for BigInt type in `key` property, from the DefinitelyTyped repository
+
+  - title: Contribution to Fish Shell
+    url: https://github.com/fish-shell/fish-shell/pull/9994
+    desc: Shorten autocomplete for node.fish
 
 

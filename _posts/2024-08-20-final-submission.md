@@ -4,7 +4,7 @@ title:  "[GSoC] Final report for Google Summer of Code"
 date:   2024-08-20
 ---
 
-# Google Summer of Code - Final report
+# Google Summer of Code 2024 - Final report
 
 After many weeks of studying and preparing a self-hosted CI, it is now time to summarize everything that
 has been done, pack it in a final report for Google Summer of Code, and review what was done right or wrong
@@ -12,7 +12,7 @@ and project the next steps to be followed.
 
 ## The proposal
 
-My application for kworkflow was about self-hosted CI with Jenkins - It was initially desired that kworkflow had
+My GSoC 2024 application for kworkflow was about self-hosted CI with Jenkins - It was initially desired that kworkflow had
 its own CI lab for deploying very sophisticated tests that could even involve hardware (thus, requiring
 a self-hosted environment for more control of testing nodes). The motivation for testing hardware components
 for testing waned over time, but the need for independence with its own CI infrastructure persisted among
@@ -118,7 +118,7 @@ practices regarding DevOps and Continuous Integration. It also forced me to work
 like Docker (I've spent a huge time working with Dockerfiles and Docker Compose environments), and Jenkins.
 
 My mentors were great. Not only have I received lots of feedback from them, but they also helped me getting
-into GSoC, after all: David read many iterations of my proposal and suggested many improvements, which was
+into GSoC 2024, after all: David read many iterations of my proposal and suggested many improvements, which was
 important to get me approved for the program, in the first place.
 
 My journey with kworkflow is not close to an end. I will not only keep an eye on the remaining tasks from
