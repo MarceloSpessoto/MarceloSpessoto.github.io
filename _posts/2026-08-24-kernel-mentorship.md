@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title:  "My experience with the Linux Kernel Mentorship"
@@ -7,50 +6,50 @@ date:   2026-08-24
 
 # Introduction
 
-I've been a mentee for the Linux Foundation's "Linux kernel Spring Unpaid 2026" mentorship, and
-I'd like to share my experiences with it.
+I’ve been a mentee for the Linux Foundation’s “Linux kernel Spring Unpaid 2026” mentorship, and
+I’d like to share my experiences with it.
 
-For context, I've already been into free software, and I've worked on projects such as `kworkflow`
-and the Linux kernel itself. However, I've always felt that my kernel contributions were still
+For context, I’ve already been into free software, and I’ve worked on projects such as `kworkflow`
+and the Linux kernel itself. However, I’ve always felt that my kernel contributions were still
 very lacking in depth and importance. Most of my contributions were based on simple code style
-fixes, that enabled me to understand the development workflow, but I did not feel like I was
+fixes that enabled me to understand the development workflow, but I did not feel like I was
 implementing significant changes for the community at all. Later, I managed to deliver a good
-documentation update for the AMD display subsystem, which felt much greater for a contribution,
+documentation update for the AMD display subsystem, which felt much greater as a contribution,
 but was still not enough for me.
 
 Joining the mentorship was an opportunity to force myself to dive deeper into kernel development
-and put myself into a "new level". First of all, I wanted to get more technical contributions
-and attempt to do some programming. Second, I wanted to get more familiarized with the workflow.
+and put myself into a “new level”. First of all, I wanted to get more technical contributions
+and attempt to do some programming. Second, I wanted to get more familiar with the workflow.
 I already knew how to compile the kernel, set up the VM for basic change validation, format patches,
-submit with git send-mail, track the patch with the kernel lore and submit new versions. However,
+submit with git send-mail, track the patch with the kernel lore, and submit new versions. However,
 the entire process still felt unnatural and filled with overhead. I needed more practice, but
 also took the opportunity to try new workflows I had not considered yet.
 
 This post will be divided into large sections, each describing a different perspective/topic on
-what I've done/learnt during the last months.
+what I’ve done/learnt during the last months.
 
 # Experimenting with setup
 
-I've always used the typical `kw` flow for build and development. If you do not know the
+I’ve always used the typical `kw` flow for build and development. If you do not know the
 [`kworkflow` project](https://kworkflow.org/index.html), I totally recommend checking it out!
 
 My main issue with this workflow was managing my VM environments for kernel deployment. It
 always felt for me like a burden to manually set up and manage existing VMs. Compiling the
-kernel was fine. I used [FLUSP guide for x86 VMs](https://flusp.ime.usp.br/kernel/use-qemu-to-play-with-linux/).
+kernel was fine. I used the [FLUSP guide for x86 VMs](https://flusp.ime.usp.br/kernel/use-qemu-to-play-with-linux/).
 I think it is pretty good, but I wondered if I could do better.
 
-So, before starting developing at all, I attempted to simplify my deployment pipeline. I had
+So, before starting to develop at all, I attempted to simplify my deployment pipeline. I had
 started the mentorship with no preconfigured VM, so I decided to try the [syzkaller setup guide](https://github.com/google/syzkaller/blob/master/docs/linux/setup_ubuntu-host_qemu-vm_x86-64-kernel.md).
-Using debootstrap was a huge improvement over initial setup, but I still had to manually invoke and
+Using debootstrap was a huge improvement over the initial setup, but I still had to manually invoke and
 boot the VM. For these cases, I usually declare a simple .bashrc alias to replace the QEMU command.
 
-This was already enough and I was already satisfied, but I suddenly found out about `virtme-ng`
-and decided to give a try.
+This was already enough, and I was already satisfied, but I suddenly found out about `virtme-ng`
+and decided to give it a try.
 
 ## Using virtme-ng
 
-I've previously heard a lot about `virtme-ng` in the past, but never tried it. It came to me
-by accident during the mentorship, and this time I've decided to give it a shot. It ended
+I’ve previously heard a lot about `virtme-ng` in the past, but never tried it. It came to me
+by accident during the mentorship, and this time I’ve decided to give it a shot. It ended
 up being my definite tool for kernel deployment (and build), and I will describe how I currently
 use it for development.
 
@@ -60,7 +59,7 @@ NOTE: All commands must be run inside the kernel tree.
 
 After using `virtme-ng` a couple of times to deploy the kernel, and learning about it, I found out
 about a pretty useful feature for kernel compilation it has, and that is not present for `kw` yet:
-it can delegate the compilation to a remote host. This is very important for me, since I work on
+It can delegate the compilation to a remote host. This is very important for me, since I work on
 a laptop but have access to a desktop server with greater computing resources.
 
 I use the following command to build a new kernel image with `virtme-ng`:
@@ -75,16 +74,16 @@ option is necessary so the compiled vmlinux can be retrieved by the guest device
 
 ### Running the kernel image
 
-This can be most of the time, done with a simple:
+This can be done most of the time with a simple:
 
 ```
 vng
 ```
 
-However, I've found that this simple command can either be optimized or must be modified for specific
+However, I’ve found that this simple command can either be optimized or must be modified for specific
 development contexts.
 
-First of all, we can use the `-m` option to set a higher memory for the virtual environment.
+First of all, we can use the `-m` option to set a higher memory limit for the virtual environment.
 
 Second, `virtme-ng`, by default, sets up a very basic and lightweight virtual environment. We may want
 something closer to a regular QEMU VM. I later found out that this is the case if we want to reproduce
@@ -92,7 +91,7 @@ bugs from `syzbot`, where we should aim for a similar environment used by `syzbo
 
 Finally, use `sudo` if you want to run the environment as root.
 
-A command with defined memory, and "QEMU-like" setup that worked for me is the following:
+A command with defined memory and a “QEMU-like” setup that worked for me is the following:
 
 ```
 sudo vng -m 6G --disable-microvm --qemu-opts="-cpu qemu64"
@@ -101,31 +100,31 @@ sudo vng -m 6G --disable-microvm --qemu-opts="-cpu qemu64"
 ### My opinion on virtme-ng
 
 I really enjoyed using `vng` for kernel development, and it became my main tool for building and running
-kernel images. However, I think it is not the definite tool, and there are some cases where you might
-want to use another approaches.
+kernel images. However, I think it is not the definitive tool, and there are some cases where you might
+want to use another approach.
 
 For building, it provides me the remote host option, which is very important for me, but I still think
 that `kw` has better customization in that regard (e.g., `ccache` and `llvm` options).
 
-For running the virtual environment, `virtme-ng` provides a pretty good balance between ease to use,
-lightweight environment and use cases. However, if you come across a very niche and specific scenario,
+For running the virtual environment, `virtme-ng` provides a pretty good balance between ease of use,
+lightweight environment, and use cases. However, if you come across a very niche and specific scenario,
 using QEMU directly may be more versatile and effective to handle some virtualisation options you need.
 
 # Working on and submitting the patches
 
-The mentorship required the submission of between 5 and 10 patches. During the year, I worked on a single
-patch set, that contained exact 5 patches, with a posterior sixth follow-up commit. It is about a refactor
-to the `ipv6_flowlabel_mgr` selftest file at the `netdev` subsystem. Next subsections will describe what
+During the year, I worked on a single
+patch set that contained exactly 5 patches, with a posterior sixth follow-up commit. It is about a refactor
+to the `ipv6_flowlabel_mgr` selftest file in the `netdev` subsystem. Next subsections will describe what
 has been worked on, the `netdev` subsystem itself, and how I proceed to submit the patches.
 
 ## netdev
 
-The netdev subsystem contains most of all networking related code in the kernel (some network subsystems get a lot
+The netdev subsystem contains most of all networking-related code in the kernel (some network subsystems get a lot
 of traffic and may have their own development tree and mailing lists, such as wireless drivers).
 
 The netdev community has [unique guidelines and internal organization](https://docs.kernel.org/process/maintainer-netdev.html) that must be complemented with the general kernel
 rules. I would highlight the differentiation of `net` and `net-next`, and the strong influence of the merge window on
-the patch submission.
+the patch submission, which caused me to finally understand how the kernel development cycle really works.
 
 First of all, contributors must indicate if they are working on new features for netdev (`net-next`), or addressing
 bugs on current code (`net`). The patch subject must contain `net` or `net-next` inside the `[PATCH]` bracket, and
@@ -139,8 +138,8 @@ patchwork to track the patch status and CI validation.
 
 ![Image](assets/images/netdev/netdev-patchwork.png)
 
-The patchwork is shared with BPF subsystem. Each patch entry shows information on patch name, series, number of Acknowledge-by's,
-Reviewed-by's and Tested-by's, CI results, patch date, submitter, corresponding subsystem (netdev or BPF) and state
+The patchwork is shared with the BPF subsystem. Each patch entry shows information on patch name, series, number of Acknowledge-by’s,
+Reviewed-by’s and Tested-by’s, CI results, patch date, submitter, corresponding subsystem (netdev or BPF), and state
 (accepted, new, under review, etc).
 
 During the mentorship, I would usually check patchwork to ensure my patch was triaged, and then navigate to the patch page to
@@ -148,62 +147,62 @@ check how it performed on CI.
 
 ## My contributions to netdev: IPV6 flow label manager
 
-During the mentorship, I've decided to focus my contributions on netdev + kselftest. I searched the files from the
-`tools/testing/selftest/net` path, looking for some uncovered feature or outdated test and found the `ipv6_flowlabel_mgr`
+During the mentorship, I’ve decided to focus my contributions on netdev + kselftest. I searched the files from the
+`tools/testing/selftest/net` path, looking for some uncovered feature or outdated test, and found the `ipv6_flowlabel_mgr`
 file.
 
 ### IPV6 flow labels and IPV6 flow label manager
 
-Understanding flow labels require reading the respective net source code (`net/ipv6/ip6_flowlabel.c`) and the [RFC 6437](https://www.rfc-editor.org/info/rfc6437/).
+Understanding flow labels requires reading the respective net source code (`net/ipv6/ip6_flowlabel.c`) and [RFC 6437](https://www.rfc-editor.org/info/rfc6437/).
 
-According to the RFC 6437, a flow is a sequence of packets sent from a particular source to a particular unicast, anycast,
+According to RFC 6437, a flow is a sequence of packets sent from a particular source to a particular unicast, anycast,
 or multicast destination that a node desires to label as a flow. For IPV6, it is defined as a 20-bit field on the IPV6 header.
 
-The IPv6 flow label manager comes as a not much known flow label feature, that allows the system user to manually
+The IPv6 flow label manager comes as a not-so-well-known flow label feature that allows the system user to manually
 interact with flow labels: using the `IPV6_FL_A_GET` action to create/assign a new flow label to a socketfd, using
 `IPV6_FL_A_PUT` action to clear an existing label from a socket, etc.
 
 ```
 static int flowlabel_get(int fd, uint32_t label, uint8_t share, uint16_t flags)
 {
-	struct in6_flowlabel_req req = {
-		.flr_action = IPV6_FL_A_GET,
-		.flr_label = htonl(label),
-		.flr_flags = flags,
-		.flr_share = share,
-	};
+struct in6_flowlabel_req req = {
+.flr_action = IPV6_FL_A_GET,
+.flr_label = htonl(label),
+.flr_flags = flags,
+.flr_share = share,
+};
 
-	/* do not pass IPV6_ADDR_ANY or IPV6_ADDR_MAPPED */
-	req.flr_dst.s6_addr[0] = 0xfd;
-	req.flr_dst.s6_addr[15] = 0x1;
+/* do not pass IPV6_ADDR_ANY or IPV6_ADDR_MAPPED */
+req.flr_dst.s6_addr[0] = 0xfd;
+req.flr_dst.s6_addr[15] = 0x1;
 
-	return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
+return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
 }
 ```
 
-The code snippet above shows an example on how it is possible to make a flow label request. One should create an
-`in6_flowlabel_req` setting the fields accordingly to the desired attributes and then pass it as an argument to
+The code snippet above shows an example of how it is possible to make a flow label request. One should create an
+`in6_flowlabel_req` setting the fields according to the desired attributes and then pass it as an argument to
 the `setsockopt` function. Making such requests is vital to write the manager tests (the example was taken from the
 test file).
 
 ### Problems found for `ipv6_flowlabel_mgr.c` and submission of v1
 
-Initially, I've noticed a lack of test coverage for the `IPV6_FL_A_RENEW` action. This action consists on extending
-the linger time for a label (when you PUT a label, it waits for the linger time to be freed and enable the label to
-be recreated). I developed a small test that creates a label for a socket, puts it, renews it to extend linger time, sleep longer
-than initial linger but less than new linger set by renew, and asserts it is still not possible to recreate the label.
+Initially, I noticed a lack of test coverage for the `IPV6_FL_A_RENEW` action. This action consists of extending
+the linger time for a label (when you PUT a label, it waits for the linger time to be freed and enables the label to
+be recreated). I developed a small test that creates a label for a socket, puts it, renews it to extend linger time, sleeps longer
+than the initial linger but less than the new linger set by renew, and asserts it is still not possible to recreate the label.
 
 However, as I investigated further, I also found other problems. First of all, two request flags were also uncovered
 by tests: `IPV6_FL_F_REMOTE` and `IPV6_FL_F_REFLECT`.
 
 The former flag, set on a GET request, enables the request to be passed to a `getsockopt` call, retrieving the label
 from the latest received header. This required me to write helpers implementing a simple TCP SYN connection, preparing
-the environment for the REMOTE test. Wrapping it on a helper was also a prediction that it would be also necessary for
+the environment for the REMOTE test. Wrapping it in a helper was also a prediction that it would also be necessary for
 REFLECT.
 
 The latter flag set a `REPFLOW` bit for the socket. A socket with this bit set will automatically adopt the label
 received from the connected socket. This specific flag also required the `flowlabel_consistency` sysctl to be disabled,
-which led to feedback changes during review cycle. My initial approach was to manually set it of inside the C file.
+which led to feedback changes during the review cycle. My initial approach was to manually set it inside the C file.
 
 Finally, I noticed that the file was very old and not following common kselftest conventions. It did not use
 the selftest harness, relying on manually declared macros inside the file. I took the opportunity to refactor the
@@ -214,22 +213,21 @@ This way, the single patch adding coverage to the RENEW action was completely tr
 The patches can be formatted with:
 
 ```
-git format-patch -v <version-number> --cover-letter \
-  --subject-prefix="PATCH net-next" \
-  -o outgoing/ <commit-range-start>..<commit-range-end>
-
+git format-patch -v  --cover-letter \
+--subject-prefix="PATCH net-next" \
+-o outgoing/ ..
 ```
 
 (OBS: no need to use `-v` on version 1)
-(OBS: 04233a25as..HEAD would format from 04233a25as to HEAD, excluding 04233a25as)
+(OBS: 04233a25as…HEAD would format from 04233a25as to HEAD, excluding 04233a25as)
 
-and the patches can be then submitted with:
+and the patches can then be submitted with:
 
 ```
 git send-email \
 --to-cmd="./scripts/get_maintainer.pl --nogit-fallback --no-rolestats" \
 --cc-cmd="./scripts/get_maintainer.pl --nogit-fallback --no-rolestats" \
-outgoing/*.patch
+outgoing/*.patch 
 ```
 
 (OBS: commits must be signed. It can be done using `-s` for git commit)
@@ -238,16 +236,16 @@ outgoing/*.patch
 
 I had already heard about the `sashiko` tool for agentic reviews of kernel patches, but I just came across it when working for
 netdev on this mentorship. Reviews made by agents were the main aspect of my review cycles. The netdev pipeline contains two
-sashiko stages: `sashiko-nipa` returns feedback from netdev-specific sashiko instance, and `sashiko-gemini`, that returns feedback
-from the [sashiko.dev](sashiko.dev) instance.
+sashiko stages: `sashiko-nipa` returns feedback from the netdev-specific sashiko instance, and `sashiko-gemini`, which returns feedback
+from the [sashiko.dev](https://sashiko.dev) instance.
 
-Jakub Kicinski, who took part on reviewing my patches, would reply each patch from the patchset with the corresponding review
+Jakub Kicinski, who took part in reviewing my patches, would reply to each patch from the patchset with the corresponding review
 from sashiko (both nipa and gemini). Of course, it was not a mindless copy-paste. The maintainer would only highlight the
 feedback that was considered valid by the human maintainer. Other types of feedback missed by the AI would be given by the
-human maintainer on separate mail replies.
+human maintainer in separate mail replies.
 
 This way, even if the CI results were available on Patchwork, I would still wait for the human reply, addressing AI feedback only
-if it was endorsed by the maintainer, while also checking if the same also gave new missing insights.
+if it was endorsed by the maintainer, while also checking if it also gave new missing insights.
 
 Alongside agentic review, the netdev Patchwork would also provide other validations, mostly on conventions being followed. For v1
 and v2, my patches would fail the `get_checkpath.pl` checks. I figured later that I should run, for each patch file, the following:
@@ -256,61 +254,61 @@ and v2, my patches would fail the `get_checkpath.pl` checks. I figured later tha
 over files, ensures extra check coverage, such as proper commit message formatting, signature, etc.
 
 I did not receive direct feedback for linting/formatting, but I would also introduce these changes on the corresponding faulty
-commits during the review cycles (and reporting them on update section of my subsequent cover letters).
+commits during the review cycles (and reporting them in the update section of my subsequent cover letters).
 
 ### How did the patchset change
 
-The patchset was merged on its v3. I will not go through every request and change made, but describe main changes between v1 and
+The patchset was merged on its v3. I will not go through every request and change made, but describe the main changes between v1 and
 v3. First of all, extra basic tests were added for RENEW, asserting basic calls would return success. The most significant change,
 however, was related to namespace setup.
 
-A network namespace isolates the test network, by having the test on its namespace and the remainder of the host system on the original namespace. 
+A network namespace isolates the test network by having the test on its namespace and the remainder of the host system on the original namespace.
 
-For the feedback of v2, I was asked to handle the creation of namespaces inside the file, an improvement possibility that I missed
-on my initial inspection of code. Initially, `ipv6_flowlabel_mgr.c` was not a standalone file, but it relied on external scripts to
+For the feedback on v2, I was asked to handle the creation of namespaces inside the file, an improvement possibility that I missed
+on my initial inspection of the code. Initially, `ipv6_flowlabel_mgr.c` was not a standalone file, but it relied on external scripts to
 ensure namespace setup for test execution, calling the helper `in_netns.sh` file. Therefore, to properly and safely execute the test
-on a device, without risking to leak namespace changes to the host, the user should not directly run the `ipv6_flowlabel_mgr` binary,
-but either run `ipv6_flowlabel.sh` script (which also run the other `ipv6_flowlabel.c` test suite), or run `./in_netns.sh ipv6_flowlabel_mgr`.
+on a device, without risking leaking namespace changes to the host, the user should not directly run the `ipv6_flowlabel_mgr` binary,
+but either run the `ipv6_flowlabel.sh` script (which also runs the other `ipv6_flowlabel.c` test suite), or run `./in_netns.sh ipv6_flowlabel_mgr`.
 
-Having the namespace setup inside the `ipv6_flowlabel_mgr` suite makes the test robustness increase, avoiding the risk of an "incorrect
-execution" and enabling the manager tests to be a self-contained and standalone test suite. Allied with the selftest harness migration,
+Having the namespace setup inside the `ipv6_flowlabel_mgr` suite increases test robustness, avoiding the risk of an “incorrect
+execution” and enabling the manager tests to be a self-contained and standalone test suite. Allied with the selftest harness migration,
 each test from manager can invoke the internal namespace helper with the aid of fixtures, so we have a custom namespace for each test
-instead of a namespace for all the suite. The implementation from tests such as `ipv6_fragmentation.c` was used as inspiration and base
+instead of a namespace for the suite. The implementation from tests such as `ipv6_fragmentation.c` was used as inspiration and base
 for the change. This specific namespace change introduced a brand new commit to the patchset, which got 5 entries.
 
 ### Follow-up commit
 
 Right after my patchset got merged, Jakub asked me to submit a follow-up commit. As I made `ipv6_flowlabel_mgr` independent from
 the `ipv6_flowlabel.sh` wrapper script, I should update this script to exclude the mgr tests. I also had to update the `selftest/net`
-Makefile to declare `ipv6_flowlabel_mgr` as its own test, so `make -C tools/testing/selftests/ TARGET=net`, would detect it.
+Makefile to declare `ipv6_flowlabel_mgr` as its own test, so `make -C tools/testing/selftests/ TARGET=net` would detect it.
 
-I submitted it right before the start of the merge window, when `net-next` was still opened. The patch was approved and merged
-with the `net-next` closed. Another interesting observation, is that another person (Hangbin Liu) independently added a `Reviewed-by`
+I submitted it right before the start of the merge window, when `net-next` was still open. The patch was approved and merged
+with `net-next` closed. Another interesting observation is that another person (Hangbin Liu) independently added a `Reviewed-by`
 to the commit.
 
 ### Conclusion
 
 This interaction with the netdev community caused me to get 6 patches merged to the `net-next` tree (and will probably be merged to
-the mainline `linux` tree by the end of the merge window).
+the mainline Linux tree by the end of the merge window).
 
 # Other insights
 
-A brief description of other things I've learned during the mentorship is present on this section.
+A brief description of other things I’ve learned during the mentorship is present in this section.
 
 ## Syzbot contributions
 
-I did not get any syzbot contribution merged to the kernel, but I believe I was able to deepen my understanding on how to debug
+I did not get any syzbot contribution merged to the kernel, but I believe I was able to deepen my understanding of how to debug
 and study syzbot issues.
 
 I was able to properly use `virtme-ng` to setup reproduction environment for a batch of reported bugs (using the options mentioned previously).
 
-The most relevant knowledge I've got was on how to debug the stack trace and easily navigate across functions. The first tool that can be used
+The most relevant knowledge I’ve got was on how to debug the stack trace and easily navigate across functions. The first tool that can be used
 is `./scripts/faddr2line`, that enables to convert offset entries such as `unregister_netdevice_queue+0x274/0x30c` from the stack trace to the corresponding
 line, using `./scripts/faddr2line <vmlinux-image> <offset>`.
 
-Another tool that I've been using a lot is vim + cscope to properly jump from a function to its caller, and vice-versa. I was introduced to cscope during
-the mentorship, but did not find it neither easy or useful to use in the beginning. However, it started working pretty well when I discovered that it is
-seamlessly integrated to vim. The cheat sheet below shows extremely useful vim commands to navigate across the stack trace of an issue:
+Another tool that I’ve been using a lot is vim + cscope to properly jump from a function to its caller, and vice versa. I was introduced to cscope during
+the mentorship, but did not find it either easy or useful to use in the beginning. However, it started working pretty well when I discovered that it is
+seamlessly integrated into vim. The cheat sheet below shows extremely useful vim commands to navigate across the stack trace of an issue:
 
 ```
 :cs find g xfs_buf_lock        " jump to definition (auto-jumps if unique)
@@ -324,11 +322,11 @@ seamlessly integrated to vim. The cheat sheet below shows extremely useful vim c
 
 # Next steps
 
-Learning "how to do kernel code" was not the main aspect of the mentorship for me. Instead, the biggest impact it left on me, was to guide me on my journey to
-insert myself on the community and get things to do and contribute to.
+Learning “how to do kernel code” was not the main aspect of the mentorship for me. Instead, the biggest impact it left on me was to guide me on my journey to
+insert myself into the community and get things to do and contribute to.
 
-I will probably start a personal project to refactor the net selftests. The other flow label test suite `ipv6_flowlabel.c` would also be greatly improved with a
-harness migration, leading to the removal of the `ipvv6_flowlabel.sh` script. I believe many other files can be adapted to the harness structure and have their
+I will probably start a personal project to refactor the net selftests. The other flow label test suite, `ipv6_flowlabel.c`, would also be greatly improved with a
+harness migration, leading to the removal of the `ipv6_flowlabel.sh` script. I believe many other files can be adapted to the harness structure and have their
 test coverage reviewed. This experience showed me that a good and active subsystem may present hidden technical debt, and this is the case for net tests.
 
-Alongside the test coverage changes, I will also be trying to get a syzbot issue addressed in the next future.
+Alongside the test coverage changes, I will also be trying to get a syzbot issue addressed in the near future.
